@@ -1,12 +1,20 @@
 import datetime
 import csv
+import re
 
 
 def task_add(taches):
+    verif = False
+
     name_task_add = input(str("Enter the name of the task: "))
-    dateline_str = input(str("Enter the dateline of the task: (dd/mm/yyyy)"))
-    if dateline_str != datetime.datetime.strptime(dateline_str, "%d/%m/%Y"):
-        print("Error")
+    while verif == False :
+        dateline_str = input(str("Enter the dateline of the task: (dd/mm/yyyy)"))
+        if not re.match(r"^(?:31\/(?:0?[13578]|1[02])|(?:29|30)\/(?:0?[13-9]|1[0-2])|(?:0?[1-9]|1\d|2[0-8])\/(?:0?[1-9]|1[0-2]))\/\d{4}$", dateline_str):
+            print("Invalid date, please enter a valid date")
+        else :
+            verif = True
+    
+
     dateline = datetime.datetime.strptime(dateline_str, "%d/%m/%Y")
     taches.append(
         {"name ": name_task_add, "completed ": False, "dateline ": dateline})
@@ -52,7 +60,8 @@ def task_remove(taches):
 def task_check(taches):
     name_task_check = int(input("Enter the number of the task to check: "))
     if name_task_check > 0 and name_task_check <= len(taches):
-        taches[name_task_check -1]["completed "] = not taches[name_task_check - 1]["completed "]
+        taches[name_task_check -
+               1]["completed "] = not taches[name_task_check - 1]["completed "]
         save_list(taches)
         task_list(taches)
         print("Task checked successfully")
